@@ -1,58 +1,62 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new() { Title = builder.Environment.ApplicationName, Version = "v1" }); });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", name: $"{builder.Environment.ApplicationName} v1"); });
 
-app.UseHttpsRedirection();
-
-// 500s
+/// 500s
+// 500
 app.MapGet("/item/problem", () =>
     Results.Problem(
         detail: "This is an internal error item",
         statusCode: 500,
         type: "application/problem+json",
         title: "Internal Server Error"))
-.ProducesProblem(500)
 .WithName("Problem")
-.WithGroupName(nameof(Item));
+.ProducesProblem(500, "application/problem+json");
 
-// 200s
-app.MapGet("/item/Ok/{id}", (int? id) =>
-{
-    if (id % 3 == 0)
+/// 400s
+// 400
+app.MapGet("/item/badrequest", () =>
     {
         var dict = new Dictionary<string, string[]>
         {
-            { "Invalid Id", new[] { "The id can be divided by 3" } }
+            { "Invalid Id", new[] { "This path will always return invalid" } }
         };
 
-        Results.ValidationProblem(dict, detail: "Validation error with the id", statusCode: 400, title: "Validation error");
-    }
+        Results.ValidationProblem(
+            dict,
+            detail: "Validation error with the id",
+            statusCode: 400,
+            title: "Validation error",
+            type: "application/problem+json");
+    })
+    .ProducesValidationProblem(400, "application/validationproblem+json")
+    .WithName("ValidationProblem");
 
-    var item = new Item { Id = 1, Name = "Item name", Description = "The item description" };
+/// 200s
+//201
+app.MapGet("/item/accepted", () => Results.Accepted())
+    .WithName("Accepted");
+
+//204
+app.MapGet("/item/empty", () => Results.NoContent())
+    .WithName("NoItem");
+
+//200
+app.MapGet("/item/Ok/{id}", (int? id) =>
+{
+    id ??= 0;
+
+    var item = new Item { Id = id.Value, Name = "Item name", Description = "The item description" };
 
     return Results.Ok(item);
-}
-)
-.ProducesValidationProblem(400, "application/validationproblem+json")
+})
 .Produces<Item>(200)
-.WithName("Ok")
-.WithGroupName(nameof(Item));
+.WithName("Ok");
 
 app.Run();
-
-public class Item
-{
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-}
