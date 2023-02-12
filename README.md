@@ -1,4 +1,6 @@
-# MockApi
+# MockApi 
+
+[![.NET](https://github.com/Jaxelr/MockApi/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Jaxelr/MockApi/actions/workflows/ci.yml)
 
 A mock api server for testing and prototyping, it returns an item DTO that can be replaced by any type of model.
 
@@ -12,3 +14,7 @@ public class Item
     public string Description { get; set; } = string.Empty;
 }
 ```
+
+### Why?
+
+Sometimes I need to add custom code related to random latency and degradation scenarios for repros and its easier to start with this template. 
