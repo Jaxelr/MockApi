@@ -1,12 +1,12 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new() { Title = builder.Environment.ApplicationName, Version = "v1" }); });
+builder.Services.AddSwaggerGen(c => c.SwaggerDoc("v1", new() { Title = builder.Environment.ApplicationName, Version = "v1" }));
 
 var app = builder.Build();
 
 app.UseSwagger();
-app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", name: $"{builder.Environment.ApplicationName} v1"); });
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", name: $"{builder.Environment.ApplicationName} v1"));
 
 /// 500s
 // 500
@@ -14,8 +14,8 @@ app.MapGet("/item/problem", () =>
     Results.Problem(
         detail: "This is an internal error item",
         statusCode: 500,
-        type: "application/problem+json",
-        title: "Internal Server Error"))
+        title: "Internal Server Error",
+        type: "application/problem+json"))
 .WithName("Problem")
 .ProducesProblem(500, "application/problem+json");
 
@@ -52,9 +52,7 @@ app.MapGet("/item/Ok/{id}", (int? id) =>
 {
     id ??= 0;
 
-    var item = new Item { Id = id.Value, Name = "Item name", Description = "The item description" };
-
-    return Results.Ok(item);
+    return Results.Ok(new Item(id.Value));
 })
 .Produces<Item>(200)
 .WithName("Ok");
