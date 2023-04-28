@@ -38,6 +38,21 @@ app.MapGet("/item/badrequest", () =>
     .ProducesValidationProblem(400, "application/validationproblem+json")
     .WithName("ValidationProblem");
 
+// 429
+app.MapGet("/item/toomanyrequests", (HttpResponse response) =>
+    {
+        response.Headers.Add("Retry-After", "120");
+
+        return Results.Problem(
+            detail: "Validation error with the id",
+            statusCode: 429,
+            title: "Too many requests error",
+            type: "application/problem+json");
+    })
+    .ProducesProblem(429, "application/validationproblem+json")
+    .WithName("ValidationProblem");
+
+
 /// 200s
 //201
 app.MapGet("/item/accepted", () => Results.Accepted())
