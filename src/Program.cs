@@ -1,12 +1,14 @@
 var builder = WebApplication.CreateBuilder(args);
 
+const string version = "v1";
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c => c.SwaggerDoc("v1", new() { Title = builder.Environment.ApplicationName, Version = "v1" }));
+builder.Services.AddSwaggerGen(c => c.SwaggerDoc(version, new() { Title = builder.Environment.ApplicationName, Version = version }));
 
 var app = builder.Build();
 
 app.UseSwagger();
-app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", name: $"{builder.Environment.ApplicationName} v1"));
+app.UseSwaggerUI(c => c.SwaggerEndpoint($"/swagger/{version}/swagger.json", name: $"{builder.Environment.ApplicationName} {version}"));
 
 /// 500s
 // 500
