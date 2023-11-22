@@ -25,10 +25,7 @@ app.MapGet("/item/problem", () =>
 // 400
 app.MapGet("/item/badrequest", () =>
     {
-        var dict = new Dictionary<string, string[]>
-        {
-            { "Invalid Id", new[] { "This path will always return invalid" } }
-        };
+        var dict = new Dictionary<string, string[]> { { "Invalid Id", new[] { "This path will always return invalid" } } };
 
         Results.ValidationProblem(
             dict,
@@ -43,7 +40,7 @@ app.MapGet("/item/badrequest", () =>
 // 429
 app.MapGet("/item/toomanyrequests", (HttpResponse response) =>
     {
-        response.Headers.Add("Retry-After", "120");
+        response.Headers.Append("Retry-After", "120");
 
         return Results.Problem(
             detail: "Validation error with the id",
