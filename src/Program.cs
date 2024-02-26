@@ -51,16 +51,7 @@ app.MapGet("/item/toomanyrequests", (HttpResponse response) =>
     .ProducesProblem(429, "application/validationproblem+json")
     .WithName("ValidationProblem");
 
-
 /// 200s
-//201
-app.MapGet("/item/accepted", () => Results.Accepted())
-    .WithName("Accepted");
-
-//204
-app.MapGet("/item/empty", () => Results.NoContent())
-    .WithName("NoItem");
-
 //200
 app.MapGet("/item/Ok/{id}", (int? id) =>
 {
@@ -70,5 +61,17 @@ app.MapGet("/item/Ok/{id}", (int? id) =>
 })
 .Produces<Item>(200)
 .WithName("Ok");
+
+//201
+app.MapGet("/item/created", () => Results.Created())
+    .WithName("Created");
+
+//202
+app.MapGet("/item/accepted", () => Results.Accepted())
+    .WithName("Accepted");
+
+//204
+app.MapGet("/item/empty", () => Results.NoContent())
+    .WithName("NoItem");
 
 app.Run();
