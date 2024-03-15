@@ -15,11 +15,11 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint($"/swagger/{version}/swagger.json", name
 app.MapGet("/item/problem", () =>
     Results.Problem(
         detail: "This is an internal error item",
-        statusCode: 500,
+        statusCode: StatusCodes.Status500InternalServerError,
         title: "Internal Server Error",
         type: "application/problem+json"))
 .WithName("Problem")
-.ProducesProblem(500, "application/problem+json");
+.ProducesProblem(StatusCodes.Status500InternalServerError, "application/problem+json");
 
 /// 400s
 // 400
@@ -30,11 +30,11 @@ app.MapGet("/item/badrequest", () =>
         Results.ValidationProblem(
             dict,
             detail: "Validation error with the id",
-            statusCode: 400,
+            statusCode: StatusCodes.Status400BadRequest,
             title: "Validation error",
             type: "application/problem+json");
     })
-    .ProducesValidationProblem(400, "application/validationproblem+json")
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest, "application/validationproblem+json")
     .WithName("ValidationProblem");
 
 // 429
@@ -44,11 +44,11 @@ app.MapGet("/item/toomanyrequests", (HttpResponse response) =>
 
         return Results.Problem(
             detail: "Validation error with the id",
-            statusCode: 429,
+            statusCode: StatusCodes.Status429TooManyRequests,
             title: "Too many requests error",
             type: "application/problem+json");
     })
-    .ProducesProblem(429, "application/validationproblem+json")
+    .ProducesProblem(StatusCodes.Status429TooManyRequests, "application/validationproblem+json")
     .WithName("ValidationProblem");
 
 /// 200s
@@ -59,19 +59,22 @@ app.MapGet("/item/Ok/{id}", (int? id) =>
 
     return Results.Ok(new Item(id.Value));
 })
-.Produces<Item>(200)
+.Produces<Item>(StatusCodes.Status200OK)
 .WithName("Ok");
 
 //201
 app.MapGet("/item/created", () => Results.Created())
+    .Produces(StatusCodes.Status201Created)
     .WithName("Created");
 
 //202
 app.MapGet("/item/accepted", () => Results.Accepted())
+    .Produces(StatusCodes.Status202Accepted)
     .WithName("Accepted");
 
 //204
 app.MapGet("/item/empty", () => Results.NoContent())
+    .Produces(StatusCodes.Status204NoContent)
     .WithName("NoItem");
 
 app.Run();
