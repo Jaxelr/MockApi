@@ -49,7 +49,7 @@ app.MapGet("/item/toomanyrequests", (HttpResponse response) =>
             type: "application/problem+json");
     })
     .ProducesProblem(StatusCodes.Status429TooManyRequests, "application/validationproblem+json")
-    .WithName("ValidationProblem");
+    .WithName("TooManyRequests");
 
 /// 200s
 //200
