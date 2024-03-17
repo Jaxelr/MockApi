@@ -17,9 +17,9 @@ app.MapGet("/item/problem", () =>
         detail: "This is an internal error item",
         statusCode: StatusCodes.Status500InternalServerError,
         title: "Internal Server Error",
-        type: "application/problem+json"))
+        type: ContentTypes.ProblemJson))
 .WithName("Problem")
-.ProducesProblem(StatusCodes.Status500InternalServerError, "application/problem+json");
+.ProducesProblem(StatusCodes.Status500InternalServerError, ContentTypes.ProblemJson);
 
 /// 400s
 // 400
@@ -32,9 +32,9 @@ app.MapGet("/item/badrequest", () =>
             detail: "Validation error with the id",
             statusCode: StatusCodes.Status400BadRequest,
             title: "Validation error",
-            type: "application/problem+json");
+            type: ContentTypes.ValidationProblemJson);
     })
-    .ProducesValidationProblem(StatusCodes.Status400BadRequest, "application/validationproblem+json")
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest, ContentTypes.ValidationProblemJson)
     .WithName("ValidationProblem");
 
 // 429
@@ -46,14 +46,14 @@ app.MapGet("/item/toomanyrequests", (HttpResponse response) =>
             detail: "Validation error with the id",
             statusCode: StatusCodes.Status429TooManyRequests,
             title: "Too many requests error",
-            type: "application/problem+json");
+            type: ContentTypes.ProblemJson);
     })
-    .ProducesProblem(StatusCodes.Status429TooManyRequests, "application/validationproblem+json")
+    .ProducesProblem(StatusCodes.Status429TooManyRequests, ContentTypes.ProblemJson)
     .WithName("TooManyRequests");
 
 /// 200s
 //200
-app.MapGet("/item/Ok/{id}", (int? id) =>
+app.MapGet("/item/ok/{id}", (int? id) =>
 {
     id ??= 0;
 
