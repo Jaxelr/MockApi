@@ -14,4 +14,8 @@
   <ItemGroup>
     <Using Include="MockApi" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+  </PropertyGroup>
 </Project>
