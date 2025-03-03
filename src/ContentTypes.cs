@@ -1,6 +1,6 @@
 ﻿namespace MockApi;
 
-public class ContentTypes
+public static class ContentTypes
 {
     public const string Json = "application/json";
     public const string ProblemJson = "application/problem+json";
