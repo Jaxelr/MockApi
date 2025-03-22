@@ -15,6 +15,11 @@ public class Item
 }
 ```
 
+## View api definition
+
+- Swagger-ui will fire on https://localhost:5001/swagger/index.html
+- Swagger json will be available on https://localhost:5001/swagger/v1/swagger.json
+
 ### Why?
 
 Sometimes I need to add custom code related to random latency and degradation scenarios for repros and its easier to start with this template. 
