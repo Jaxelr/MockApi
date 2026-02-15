@@ -1,14 +1,18 @@
+using Scalar.AspNetCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-const string version = "v1";
+builder.Services.AddOpenApi();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c => c.SwaggerDoc(version, new() { Title = builder.Environment.ApplicationName, Version = version }));
+const string documentName = "openapi";
 
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI(c => c.SwaggerEndpoint($"/swagger/{version}/swagger.json", name: $"{builder.Environment.ApplicationName} {version}"));
+app.MapOpenApi();
+app.MapScalarApiReference(documentName);
+
+//Redirect to the OpenAPI document
+app.MapGet("/", () => Results.Redirect($"/{documentName}"));
 
 /// 500s
 // 500
@@ -77,4 +81,4 @@ app.MapGet("/item/empty", () => Results.NoContent())
     .Produces(StatusCodes.Status204NoContent)
     .WithName("NoItem");
 
-app.Run();
+await app.RunAsync();
