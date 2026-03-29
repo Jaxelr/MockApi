@@ -2,7 +2,7 @@
 version: 2
 updates:
   - package-ecosystem: "nuget"
-    directory: "/src/MockApi" #MockApi.csproj
+    directory: "/src" #MockApi.csproj
     schedule:
       interval: "weekly"
       day: "friday"
