@@ -212,4 +212,3 @@ dotnet_naming_rule.interface_types_must_be_prefixed_with_i.style = prefix_interf
 # Custom Rules
 dotnet_diagnostic.RCS1090.severity = none
 dotnet_diagnostic.CA1861.severity = none
-tab_width = 4
